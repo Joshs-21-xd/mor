@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>carta</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --vino-oscuro:#2b0012;
+  --vino:#4b0e1f;
+  --vino-claro:#7a1e3a;
+  --accent:#ffb6c1;
+  --blanco:#fff;
+}
+
+*{box-sizing:border-box;}
+html,body{height:100%; margin:0;}
+body{
+font-family:Poppins,system-ui;
+color:white;
+background:
+radial-gradient(circle at top left,#ffcad8,transparent 35%),
+linear-gradient(135deg,#8b3150,#ff6f9b);
+overflow:hidden;
+}
+
+.hearts{
+  position:fixed; inset:0; pointer-events:none; z-index:0;
+  overflow:hidden;
+}
+.heart{
+  position:absolute; top:-10vh;
+  font-size:14px; opacity:.75; filter:drop-shadow(0 4px 6px #0006);
+  animation:fall linear forwards;
+}
+@keyframes fall{
+  to{ transform:translateY(120vh) rotate(360deg); opacity:.95 }
+}
+.wrap{
+    position:relative;
+    z-index:2;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.card{
+  width:min(680px, 92vw);
+  background:linear-gradient(180deg,#ffffff08,#00000022);
+  border:1px solid #ffffff22;
+  border-radius:24px; padding:22px;
+  box-shadow:0 20px 60px #0008, inset 0 1px 0 #ffffff22;
+  backdrop-filter: blur(6px);
+}
+.header{
+  text-align:center; margin-bottom:12px;
+}
+.header h1{
+font-family:"Great Vibes",cursive;
+font-size:clamp(45px,8vw,75px);
+margin:0 0 35px;
+color:white;
+text-align:center;
+text-shadow:0 5px 15px rgba(0,0,0,.35);
+animation:aparecer 1.5s ease;
+}
+.header h1 span{
+font-family:Poppins;
+font-size:.8em;
+display:inline-block;
+animation:latido 1.5s infinite;
+}
+.envelope{
+position:relative;
+width:420px;
+max-width:90vw;
+height:260px;
+margin:auto;
+perspective:1000px;
+}
+.env-body{
+  position:absolute; inset:0;
+  border-radius:18px;
+  background:linear-gradient(180deg,#fff0f4,#ffc5d1 60%,#ff9fb3);
+  border:2px solid #ffd6df;
+  box-shadow:0 10px 28px #0005, inset 0 1px 0 #fff6;
+  overflow:hidden;
+}
+
+.env-flap{
+  position:absolute; inset:0;
+  clip-path:polygon(0 0, 100% 0, 50% 65%);
+  background:linear-gradient(180deg,#ffb5c4,#ff9fb2);
+  border-top-left-radius:18px; border-top-right-radius:18px;
+  transform-origin:top center;
+  transition: transform 1s cubic-bezier(.19,1,.22,1), box-shadow 1s;
+  box-shadow: inset 0 -2px 6px #0003;
+  z-index:2;
+}
+
+.envelope.open .env-flap {
+  transform: rotateX(-180deg);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.seal {
+  position: absolute;
+  top: 130px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 70px;
+  background: #b30e35;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 3;
+}
+.seal.hide {
+  opacity: 0;
+  transform: scale(0.3);
+}
+
+.btn-open {
+  position: absolute;         
+  top: calc(100% + 30px);      
+  left: 50%;                   
+  transform: translateX(-50%);
+  padding: 0.8rem 1.2rem;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(180deg, #fff, #ffd7e0);
+  color: #7a1e3a; 
+  box-shadow: 0 10px 24px #0005;
+  transition: 0.25s;
+  z-index: 4;
+}
+
+.paper {
+  position: absolute;
+  top: 120%; 
+  left: 50%;       
+  transform: translate(-50%, -50%) scale(0.8); 
+  width: 90%;
+  max-height: 86vh;
+  opacity: 0;
+  color: #4b2a1e;
+
+  background-color: #fdf6e3; 
+  background-image: 
+    linear-gradient(0deg, rgba(0,0,0,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 3px 3px, 3px 3px, 10px 10px; 
+  
+  border-radius: 0; 
+  border: 1px solid #e0d4c0;
+  padding: 25px;
+  box-shadow:
+    0 5px 15px rgba(0,0,0,0.2),
+    inset 0 1px 0 #ffffff50,
+    inset 0 -1px 0 #dcd0b0;
+
+  transition: transform 0.7s ease, opacity 0.7s ease;
+  overflow:auto;
+  z-index:1;
+}
+
+.envelope.open .paper {
+ transform: translate(-50%, -90%) scale(1);
+  opacity: 1;
+  z-index:2;
+}
+
+.paper h2 {
+  font-family: "Great Vibes", cursive;
+  color: #7a1e3a; 
+  font-size: clamp(28px, 5vw, 48px); 
+  margin: .1em 0 .2em;
+  text-align: left; 
+}
+.paper p { 
+  font-size: 14px; 
+  line-height: 1.8; 
+  margin: .5em 0;
+  text-align: left;  
+}
+.signature { 
+  margin-top: 1rem; 
+  font-weight: 700; 
+  color: #7a1e3a;
+  text-align: left;
+}
+
+.controls{
+  position:fixed; right:14px; bottom:14px; z-index:20;
+  display:flex; gap:.6rem; flex-wrap:wrap;
+}
+.pill{
+  border:none; border-radius:999px; padding:.65rem 1rem; cursor:pointer;
+  background:#ffffff; color:#6c1230; font-weight:700;
+  box-shadow:0 10px 24px #0007;
+}
+</style>
+</head>
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<div class="wrap">
+  <div class="card">
+    <div class="header">
+      <h1>
+Para mi mocosa 
+<span>❤️</span>
+</h1>
+    </div>
+
+    <div class="envelope" id="envelope">
+      <div class="env-body"></div>
+      <div class="seal" id="seal">🤍</div>
+      <div class="env-flap" id="flap"></div>
+
+      <article class="paper">
+<h2>Para mi Mocosa ❤️</h2>
+
+<p>
+Mi amor, quiero que sepas lo inmensamente importante que eres para mí. Desde el momento en que llegaste a mi vida, algo cambió dentro de mí. Trajiste una felicidad que no sabía que me hacía falta y llenaste de luz muchos de mis días. Contigo aprendí que el amor no siempre se demuestra con grandes regalos o palabras perfectas, sino con los pequeños detalles: una conversación, una risa compartida, una mirada, un abrazo o simplemente el hecho de estar presente cuando el otro más lo necesita.
+</p>
+
+<p>
+Gracias por cada momento que hemos compartido, por cada sonrisa que has provocado en mí y por todas esas veces en las que has hecho que un día normal se convierta en uno especial. Me encanta la forma en la que eres, tu manera de ver la vida, tu ternura, tu carácter, tus ocurrencias y hasta esas pequeñas imperfecciones que te hacen única. No cambiaría nada de ti, porque cada parte de quien eres es una de las razones por las que me enamoro más de ti cada día.
+</p>
+
+<p>
+Sé que no todos los días son buenos. Habrá momentos en los que te sientas cansada, frustrada, triste o simplemente sin ganas de hablar con nadie. Habrá días en los que prefieras guardar silencio y pensar que es mejor enfrentar todo tú sola. Y quiero que sepas que está bien sentirte así, porque nadie puede estar fuerte todo el tiempo.
+</p>
+
+<p>
+Pero también quiero que nunca olvides algo muy importante: aunque no tengas ganas de hablar, aunque quieras estar sola por un rato o sientas que nadie puede entender lo que pasa por tu mente, yo voy a seguir aquí. No porque quiera invadir tu espacio, sino porque me importas demasiado como para dejar de preocuparme por ti. Siempre voy a estar pendiente de cómo estás, preguntándome si ya comiste, si descansaste, si lograste sonreír un poquito o si simplemente necesitas que alguien permanezca a tu lado sin decir una sola palabra.
+</p>
+
+<p>
+No quiero que sientas que tienes que fingir estar bien conmigo. No tienes que sonreír solo para tranquilizarme ni ocultar tus lágrimas por miedo a preocuparme. Si algún día necesitas llorar, desahogarte o simplemente guardar silencio mientras alguien te acompaña, quiero ser esa persona. Quiero que sientas la confianza de buscarme cuando el mundo se te haga pesado, porque jamás voy a juzgarte por sentirte mal. Al contrario, voy a hacer todo lo posible para recordarte lo fuerte, valiosa y maravillosa que eres.
+</p>
+
+<p>
+Quizá no siempre tenga las palabras perfectas para hacer desaparecer tus problemas, pero sí puedo prometerte que nunca te faltará alguien dispuesto a escucharte, abrazarte y caminar contigo incluso en los momentos más difíciles. A veces el amor no consiste en solucionar todo, sino en quedarse, en no irse cuando las cosas se complican. Y eso es exactamente lo que quiero hacer: quedarme a tu lado, apoyarte y demostrarte que no estás sola.
+</p>
+
+<p>
+Quiero seguir creando recuerdos contigo, reírnos por tonterías, cumplir sueños, superar obstáculos y mirar hacia atrás dentro de muchos años sintiéndonos orgullosos de todo lo que vivimos juntos. No prometo que nuestra historia será perfecta, porque ninguna lo es, pero sí prometo esforzarme cada día por hacerte sentir amada, respetada y valorada. Prometo elegirte una y otra vez, incluso cuando la vida nos ponga pruebas, porque mi corazón ya tomó esa decisión desde hace mucho tiempo.
+</p>
+
+<p>
+Eres mi lugar favorito, mi paz cuando todo parece un caos y una de las razones más bonitas por las que sonrío cada día. Gracias por existir, por permitirme formar parte de tu vida y por regalarme tanto amor. Ojalá nunca dudes de lo importante que eres para mí, porque si algún día las palabras no son suficientes para demostrarlo, espero que mis acciones siempre te recuerden cuánto te amo.
+</p>
+
+<p>
+Y, por favor, recuerda esto siempre: cuando estés feliz, quiero celebrar contigo; cuando estés triste, quiero acompañarte; cuando sientas que no puedes más, quiero ayudarte a levantarte; y cuando creas que nadie está ahí para ti, quiero que recuerdes que siempre habrá una persona pendiente de ti y esa persona siempre sere yo.
+</p>
+
+<p class="signature">
+Con todo mi amor,<br>
+Josh ❤️
+</p>
+
+</article>
+    </div>
+
+    <button class="btn-open" id="openBtn" type="button">Abrir carta</button>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="pill" id="closeBtn" type="button" style="display:none">✖ Cerrar</button>
+</div>
+
+<script>
+(function heartsRain(){
+ const container = document.getElementById('hearts');
+ const symbols = ['💗'];
+ const N = 28;
+
+ for(let i=0;i<N;i++){
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+
+    h.style.left = Math.random()*100 + 'vw';
+    h.style.animationDuration = (6 + Math.random()*8) + 's';
+    h.style.animationDelay = Math.random()*6 + 's';
+    h.style.fontSize = (14 + Math.random()*24) + 'px';
+
+    container.appendChild(h);
+
+    h.addEventListener('animationend', ()=>{
+        h.style.animationDelay = (Math.random()*4)+'s';
+        h.style.animationDuration = (6 + Math.random()*8)+'s';
+        h.style.left = (Math.random()*100)+'vw';
+        h.style.fontSize = (14 + Math.random()*24)+'px';
+
+        h.style.animationName='none';
+        void h.offsetWidth;
+        h.style.animationName='fall';
+    });
+ }
+})();
+
+
+// ELEMENTOS
+const envelope = document.getElementById("envelope");
+const openBtn = document.getElementById("openBtn");
+const closeBtn = document.getElementById("closeBtn");
+const seal = document.getElementById("seal");
+
+
+// ABRIR CARTA
+openBtn.addEventListener("click", ()=>{
+
+    envelope.classList.add("open");
+
+    seal.classList.add("hide");
+
+    openBtn.style.display="none";
+
+    closeBtn.style.display="inline-block";
+
+});
+
+
+// CERRAR CARTA
+closeBtn.addEventListener("click", ()=>{
+
+    envelope.classList.remove("open");
+
+    seal.classList.remove("hide");
+
+    closeBtn.style.display="none";
+
+    openBtn.style.display="inline-block";
+
+});
+
+</script>
+</body>
+</html>
+
+
+
